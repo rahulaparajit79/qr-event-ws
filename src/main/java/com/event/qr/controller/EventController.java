@@ -1,67 +1,67 @@
 package com.event.qr.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
-
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
-import com.event.qr.util.ResponseObject;
-import com.event.qr.util.ResponseList;
-
-
-import com.event.qr.service.EventService;
 import com.event.qr.model.Event;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import java.util.ArrayList;
-
-
+import com.event.qr.service.EventService;
+import com.event.qr.util.ResponseList;
+import com.event.qr.util.ResponseObject;
 
 @RestController
-@CrossOrigin(origins="*",allowedHeaders="*")
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RequestMapping("/event")
-public class EventController{ 
+public class EventController {
 
-@Autowired
-EventService eventservice;
+	@Autowired
+	EventService eventservice;
 
-@PostMapping("/add")
-public ResponseObject<Event> saveEvent(@RequestBody Event event){
+	@GetMapping("/")
+	public String getEventWelcome() {
 
-return eventservice.saveEvent(event);
-}
+		return "This is event controller.";
 
-@GetMapping("/getbyid")
-public ResponseObject<Event> getEventById(@RequestParam(value="id",required=true) int id){
-
-return eventservice.getEventById(id);
+	}
 
 
-}
+	@PostMapping("/add")
+	public ResponseObject<Event> saveEvent(@RequestBody Event event) {
 
-@GetMapping("/listall")
-public ResponseList<Event> getEventListAll(){ 
+		return eventservice.saveEvent(event);
+	}
 
-return eventservice.getAllEvents();
-}
+	@GetMapping("/getbyid")
+	public ResponseObject<Event> getEventById(@RequestParam(value = "id", required = true) int id) {
 
-@PutMapping("/update")
-public ResponseObject<Event>  updateEvent(@RequestBody Event event){ 
+		return eventservice.getEventById(id);
 
-return eventservice.updateEvent(event);
-}
+	}
 
-@DeleteMapping("/delete")
-public ResponseObject<Event> deleteEventById(@RequestParam(value="id",required=true) int id){
+	@GetMapping("/listall")
+	public ResponseList<Event> getEventListAll() {
 
-return eventservice.deleteEventById(id);
+		return eventservice.getAllEvents();
+	}
 
-}
+	@PutMapping("/update")
+	public ResponseObject<Event> updateEvent(@RequestBody Event event) {
+
+		return eventservice.updateEvent(event);
+	}
+
+	@DeleteMapping("/delete")
+	public ResponseObject<Event> deleteEventById(@RequestParam(value = "id", required = true) int id) {
+
+		return eventservice.deleteEventById(id);
+
+	}
 
 }
