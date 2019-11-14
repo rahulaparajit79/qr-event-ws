@@ -1,0 +1,32 @@
+# config context path to "/" by setting an empty string
+server:
+  port: 8080
+  contextPath:
+
+# JACKSON
+spring:
+  jackson:
+    serialization:
+      INDENT_OUTPUT: true
+
+jwt:
+  header: Authorization
+  secret: S@h!1GP
+  expiration: 60000
+  route:
+    authentication:
+      path: auth
+      refresh: refresh
+
+#logging:
+#  level:
+#    org.springframework:
+#      security: DEBUG
+
+
+# Hibernate
+#hibernate.dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+#hibernate.show_sql: true
+#hibernate.hbm2ddl.auto: update
+#entitymanager.packagesToScan: 
+

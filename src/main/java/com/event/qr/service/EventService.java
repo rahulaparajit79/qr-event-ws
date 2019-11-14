@@ -11,127 +11,128 @@ import com.event.qr.dao.EventDAO;
 import java.util.ArrayList;
 
 @Service
-public class EventService { 
+public class EventService {
 
-@Autowired
-EventDAO eventdao;
+	@Autowired
+	EventDAO eventdao;
 
-public ResponseObject<Event> saveEvent(Event event) { 
+	public ResponseObject<Event> saveEvent(Event event) {
 
- ResponseObject<Event> responseObject = new ResponseObject<>();
-if(eventdao.saveEvent(event)){
+		ResponseObject<Event> responseObject = new ResponseObject<>();
+		if (eventdao.saveEvent(event)) {
 
-responseObject.setResponseCode(ResponseCodes.SUCCESS.getResponseCode());
-responseObject.setResponseDesc("Record has been saved successfully");
-responseObject.setResponseData(event);
+			responseObject.setResponseCode(ResponseCodes.SUCCESS.getResponseCode());
+			responseObject.setResponseDesc("Record has been saved successfully");
+			responseObject.setResponseData(event);
 
-return responseObject;}else{
+			return responseObject;
+		} else {
 
-event = null;
+			event = null;
 
-responseObject.setResponseCode(ResponseCodes.FAILURE.getResponseCode());
-responseObject.setResponseDesc("Failed to save record");
-responseObject.setResponseData(event);
+			responseObject.setResponseCode(ResponseCodes.FAILURE.getResponseCode());
+			responseObject.setResponseDesc("Failed to save record");
+			responseObject.setResponseData(event);
 
-return responseObject;}
+			return responseObject;
+		}
 
-}
+	}
 
+	public ResponseList<Event> getAllEvents() {
 
-public ResponseList<Event> getAllEvents() {
+		ResponseList<Event> responseList = null;
+		ArrayList<Event> eventList = null;
 
-ResponseList<Event> responseList = null;ArrayList<Event> eventList =null;
+		eventList = eventdao.getAllEvents();
 
-eventList = eventdao.getAllEvents();
+		if (eventList.isEmpty()) {
 
-if(eventList.isEmpty()){
+			responseList = new ResponseList<>();
+			responseList.setResponseCode(ResponseCodes.FAILURE.getResponseCode());
+			responseList.setResponseDesc("Failed to get all records");
+			responseList.setList(eventList);
+		} else {
 
-responseList = new ResponseList<>();
-responseList.setResponseCode(ResponseCodes.FAILURE.getResponseCode());
-responseList.setResponseDesc("Failed to get all records");
-responseList.setList(eventList);
-}else{
+			responseList = new ResponseList<>();
+			responseList.setResponseCode(ResponseCodes.SUCCESS.getResponseCode());
+			responseList.setResponseDesc("All records fetched successfully");
+			responseList.setList(eventList);
+		}
+		return responseList;
+	}
 
-responseList = new ResponseList<>();
-responseList.setResponseCode(ResponseCodes.SUCCESS.getResponseCode());
-responseList.setResponseDesc("All records fetched successfully");
-responseList.setList(eventList);
-}
-return responseList;
-}
+	public ResponseObject<Event> getEventById(int id) {
 
+		ResponseObject<Event> responseObject = new ResponseObject<>();
+		Event event = null;
 
-public ResponseObject<Event> getEventById(int id) { 
+		event = eventdao.getEventById(id);
 
- ResponseObject<Event> responseObject = new ResponseObject<>();Event event = null;
+		if (event != null) {
 
-event = eventdao.getEventById(id);
+			responseObject.setResponseCode(ResponseCodes.SUCCESS.getResponseCode());
+			responseObject.setResponseDesc("Record found");
+			responseObject.setResponseData(event);
 
-if(event!= null){
+			return responseObject;
+		} else {
 
-responseObject.setResponseCode(ResponseCodes.SUCCESS.getResponseCode());
-responseObject.setResponseDesc("Record found");
-responseObject.setResponseData(event);
+			event = null;
 
-return responseObject;
-}else{
+			responseObject.setResponseCode(ResponseCodes.NOT_FOUND.getResponseCode());
+			responseObject.setResponseDesc("Record not found ");
+			responseObject.setResponseData(event);
 
-event = null;
+			return responseObject;
+		}
 
-responseObject.setResponseCode(ResponseCodes.NOT_FOUND.getResponseCode());
-responseObject.setResponseDesc("Record not found ");
-responseObject.setResponseData(event);
+	}
 
-return responseObject;}
+	public ResponseObject<Event> updateEvent(Event event) {
 
-}
+		ResponseObject<Event> responseObject = new ResponseObject<>();
+		if (eventdao.updateEvent(event)) {
 
+			responseObject.setResponseCode(ResponseCodes.SUCCESS.getResponseCode());
+			responseObject.setResponseDesc("Record updated successfully");
+			responseObject.setResponseData(event);
 
-public ResponseObject<Event> updateEvent(Event event) { 
+			return responseObject;
 
- ResponseObject<Event> responseObject = new ResponseObject<>();if(eventdao.updateEvent(event)){
+		} else {
 
-responseObject.setResponseCode(ResponseCodes.SUCCESS.getResponseCode());
-responseObject.setResponseDesc("Record updated successfully");
-responseObject.setResponseData(event);
+			responseObject.setResponseCode(ResponseCodes.FAILURE.getResponseCode());
+			responseObject.setResponseDesc("Failed to update record");
+			responseObject.setResponseData(event);
 
-return responseObject;
+			return responseObject;
 
-}else{
+		}
+	}
 
-responseObject.setResponseCode(ResponseCodes.FAILURE.getResponseCode());
-responseObject.setResponseDesc("Failed to update record");
-responseObject.setResponseData(event);
+	public ResponseObject<Event> deleteEventById(int id) {
 
-return responseObject;
+		ResponseObject<Event> responseObject = new ResponseObject<>();
 
-}
-}
+		if (eventdao.deleteEventById(id)) {
 
+			responseObject.setResponseCode(ResponseCodes.SUCCESS.getResponseCode());
+			responseObject.setResponseDesc("Record deleted successfully");
+			responseObject.setResponseData(null);
 
-public ResponseObject<Event> deleteEventById(int id) { 
+			return responseObject;
 
- ResponseObject<Event> responseObject = new ResponseObject<>();
+		} else {
 
-if(eventdao.deleteEventById(id)){
+			responseObject.setResponseCode(ResponseCodes.FAILURE.getResponseCode());
+			responseObject.setResponseDesc("Failed to delete record");
+			responseObject.setResponseData(null);
 
-responseObject.setResponseCode(ResponseCodes.SUCCESS.getResponseCode());
-responseObject.setResponseDesc("Record deleted successfully");
-responseObject.setResponseData(null);
+			return responseObject;
 
-return responseObject;
+		}
 
-}else{
-
-responseObject.setResponseCode(ResponseCodes.FAILURE.getResponseCode());
-responseObject.setResponseDesc("Failed to delete record");
-responseObject.setResponseData(null);
-
-return responseObject;
-
-}
-
-}
-
+	}
 
 }

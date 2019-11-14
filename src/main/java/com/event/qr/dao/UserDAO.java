@@ -188,6 +188,52 @@ public class UserDAO {
 			}
 		}
 	}
+	
+	public User getUserByMobileNo(String mobileNo) {
+		Connection connection = DBConnection.getConnection();
+		CallableStatement cstatement = null;
+
+		User user = null;
+
+		try {
+
+			cstatement = connection.prepareCall("{CALL User_SelectByMobileNo(?)}");
+			cstatement.setString("p_mobileNo", mobileNo);
+			ResultSet resultSet = cstatement.executeQuery();
+
+			if (resultSet.next()) {
+				user = new User();
+
+				user.setId(resultSet.getInt("id"));
+				user.setPartyId(resultSet.getInt("partyId"));
+				user.setName(resultSet.getString("name"));
+				user.setMobileNo(resultSet.getString("mobileNo"));
+				user.setEmailId(resultSet.getString("emailId"));
+				user.setUsername(resultSet.getString("username"));
+				user.setPassword(resultSet.getString("password"));
+				user.setUserImage(resultSet.getString("userImage"));
+
+				return user;
+			} else {
+				user = null;
+				return user;
+			}
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+			user = new User();
+			return user;
+
+		} finally {
+			try {
+				if (connection != null)
+					connection.close();
+			} catch (Exception e) {
+				e.printStackTrace();
+				// TODO: handle exception
+			}
+		}
+	}
 
 	public boolean updateUser(User user) {
 		Connection connection = DBConnection.getConnection();

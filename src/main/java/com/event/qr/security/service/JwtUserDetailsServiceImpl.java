@@ -27,11 +27,11 @@ public class JwtUserDetailsServiceImpl implements UserDetailsService {
 		if(username.equals("admin")){
 			User user = new User();
 			user.setMobileNo("admin");
-			user.setPassword("$2a$10$oGQ.C5rmi6ID/nKzY7jk8uWZuC2MBLvp1kmFJPqJc4YnRVAvV52Ou");//Fr!DGEb0tT!e
+			user.setPassword("$2a$10$3qRAzLFmtjURMlWiJccRQuswOtBy5zzSGrvQ8Uzo5VJq05qXZ26qq");//admin123
 			return user;
 		}
 
-		User user = userDao.getUserByUsername(username);
+		User user = userDao.getUserByMobileNo(username);
 
 		if (user == null) {
 			throw new UsernameNotFoundException(String.format("No user found with username '%s'.", username));

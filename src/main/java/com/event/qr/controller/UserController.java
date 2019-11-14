@@ -21,47 +21,44 @@ import com.event.qr.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import java.util.ArrayList;
 
-
-
 @RestController
-@CrossOrigin(origins="*",allowedHeaders="*")
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RequestMapping("/user")
-public class UserController{ 
+public class UserController {
 
-@Autowired
-UserService userservice;
+	@Autowired
+	UserService userservice;
 
-@PostMapping("/add")
-public ResponseObject<User> saveUser(@RequestBody User user){
+	@PostMapping("/add")
+	public ResponseObject<User> saveUser(@RequestBody User user) {
 
-return userservice.saveUser(user);
-}
+		return userservice.saveUser(user);
+	}
 
-@GetMapping("/getbyid")
-public ResponseObject<User> getUserById(@RequestParam(value="id",required=true) int id){
+	@GetMapping("/getbyid")
+	public ResponseObject<User> getUserById(@RequestParam(value = "id", required = true) int id) {
 
-return userservice.getUserById(id);
+		return userservice.getUserById(id);
 
+	}
 
-}
+	@GetMapping("/listall")
+	public ResponseList<User> getUserListAll() {
 
-@GetMapping("/listall")
-public ResponseList<User> getUserListAll(){ 
+		return userservice.getAllUsers();
+	}
 
-return userservice.getAllUsers();
-}
+	@PutMapping("/update")
+	public ResponseObject<User> updateUser(@RequestBody User user) {
 
-@PutMapping("/update")
-public ResponseObject<User>  updateUser(@RequestBody User user){ 
+		return userservice.updateUser(user);
+	}
 
-return userservice.updateUser(user);
-}
+	@DeleteMapping("/delete")
+	public ResponseObject<User> deleteUserById(@RequestParam(value = "id", required = true) int id) {
 
-@DeleteMapping("/delete")
-public ResponseObject<User> deleteUserById(@RequestParam(value="id",required=true) int id){
+		return userservice.deleteUserById(id);
 
-return userservice.deleteUserById(id);
-
-}
+	}
 
 }
