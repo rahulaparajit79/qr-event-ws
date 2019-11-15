@@ -10,6 +10,7 @@ import java.nio.file.Paths;
 import java.util.Base64;
 
 import javax.imageio.ImageIO;
+import javax.xml.bind.DatatypeConverter;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -24,6 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.event.qr.model.Event;
 import com.event.qr.service.EventService;
+import com.event.qr.util.Base64EncoderDecoder;
 import com.event.qr.util.ResponseCodes;
 import com.event.qr.util.ResponseList;
 import com.event.qr.util.ResponseObject;
@@ -84,7 +86,9 @@ public class EventController {
 	public ResponseObject<String> scanqr(@RequestBody String encodedImg) {
 
 		ResponseObject<String> response = new ResponseObject<>();
-		byte[] decodedImg = Base64.getDecoder().decode(encodedImg.getBytes(StandardCharsets.UTF_8));
+//		Base64EncoderDecoder base64 = new Base64EncoderDecoder();
+//		byte[] decodedImg = Base64EncoderDecoder.decode(encodedImg); //Base64.getDecoder().decode(encodedImg.getBytes(StandardCharsets.UTF_8));
+		byte[] decodedImg = DatatypeConverter.parseBase64Binary(encodedImg);
 		File imgFile = null;
 		
 			try {
