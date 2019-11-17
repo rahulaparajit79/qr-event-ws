@@ -100,6 +100,7 @@ public class UserDAO {
 	public User getUserById(int id) {
 		Connection connection = DBConnection.getConnection();
 		CallableStatement cstatement = null;
+		ResultSet resultSet = null;
 
 		User user = null;
 
@@ -107,7 +108,7 @@ public class UserDAO {
 
 			cstatement = connection.prepareCall("{CALL User_SelectById(?)}");
 			cstatement.setInt("p_id", id);
-			ResultSet resultSet = cstatement.executeQuery();
+			resultSet = cstatement.executeQuery();
 
 			if (resultSet.next()) {
 				user = new User();
@@ -134,6 +135,10 @@ public class UserDAO {
 
 		} finally {
 			try {
+				if (resultSet != null)
+					resultSet.close();
+				if (cstatement != null)
+					cstatement.close();
 				if (connection != null)
 					connection.close();
 			} catch (Exception e) {
@@ -146,6 +151,7 @@ public class UserDAO {
 	public User getUserByUsername(String username) {
 		Connection connection = DBConnection.getConnection();
 		CallableStatement cstatement = null;
+		ResultSet resultSet = null;
 
 		User user = null;
 
@@ -153,7 +159,7 @@ public class UserDAO {
 
 			cstatement = connection.prepareCall("{CALL User_SelectByUsername(?)}");
 			cstatement.setString("p_username", username);
-			ResultSet resultSet = cstatement.executeQuery();
+			resultSet = cstatement.executeQuery();
 
 			if (resultSet.next()) {
 				user = new User();
@@ -180,6 +186,10 @@ public class UserDAO {
 
 		} finally {
 			try {
+				if (resultSet != null)
+					resultSet.close();
+				if (cstatement != null)
+					cstatement.close();
 				if (connection != null)
 					connection.close();
 			} catch (Exception e) {
@@ -188,10 +198,11 @@ public class UserDAO {
 			}
 		}
 	}
-	
+
 	public User getUserByMobileNo(String mobileNo) {
 		Connection connection = DBConnection.getConnection();
 		CallableStatement cstatement = null;
+		ResultSet resultSet = null;
 
 		User user = null;
 
@@ -199,7 +210,7 @@ public class UserDAO {
 
 			cstatement = connection.prepareCall("{CALL User_SelectByMobileNo(?)}");
 			cstatement.setString("p_mobileNo", mobileNo);
-			ResultSet resultSet = cstatement.executeQuery();
+			resultSet = cstatement.executeQuery();
 
 			if (resultSet.next()) {
 				user = new User();
@@ -221,16 +232,58 @@ public class UserDAO {
 		} catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();
-			user = new User();
 			return user;
 
 		} finally {
 			try {
+				if (resultSet != null)
+					resultSet.close();
+				if (cstatement != null)
+					cstatement.close();
 				if (connection != null)
 					connection.close();
 			} catch (Exception e) {
 				e.printStackTrace();
 				// TODO: handle exception
+			}
+		}
+	}
+
+	public boolean checkMobileNoUsedByOtherUser(String mobileNo, int userId) {
+		Connection connection = DBConnection.getConnection();
+		CallableStatement cstatement = null;
+		ResultSet resultSet = null;
+		boolean result = false;
+
+		try {
+			cstatement = connection.prepareCall("{CALL User_CheckMobileNoUsed(?,?)}");
+			cstatement.setString("p_mobileNo", mobileNo);
+			cstatement.setInt("p_userId", userId);
+			resultSet = cstatement.executeQuery();
+
+			if (resultSet.next()) {
+
+				if (resultSet.getInt(1) > 0) {
+					return true;
+				}
+				return result;
+			} else {
+				return result;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return result;
+
+		} finally {
+			try {
+				if (resultSet != null)
+					resultSet.close();
+				if (cstatement != null)
+					cstatement.close();
+				if (connection != null)
+					connection.close();
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
 		}
 	}
@@ -264,10 +317,13 @@ public class UserDAO {
 			return false;
 		} finally {
 			try {
+				if (cstatement != null)
+					cstatement.close();
 				if (connection != null)
 					connection.close();
 			} catch (Exception e) {
 				e.printStackTrace();
+				// TODO: handle exception
 			}
 		}
 
@@ -292,13 +348,104 @@ public class UserDAO {
 			return false;
 		} finally {
 			try {
+				if (cstatement != null)
+					cstatement.close();
+				if (connection != null)
+					connection.close();
+			} catch (Exception e) {
+				e.printStackTrace();
+				// TODO: handle exception
+			}
+		}
+
+	}
+
+	public User getUserByEmailId(String emailid) {
+		Connection connection = DBConnection.getConnection();
+		CallableStatement cstatement = null;
+		ResultSet resultSet = null;
+
+		User user = null;
+
+		try {
+
+			cstatement = connection.prepareCall("{CALL User_SelectByEmailId(?)}");
+			cstatement.setString("p_emailId", emailid);
+			resultSet = cstatement.executeQuery();
+
+			if (resultSet.next()) {
+				user = new User();
+
+				user.setId(resultSet.getInt("id"));
+				user.setPartyId(resultSet.getInt("partyId"));
+				user.setName(resultSet.getString("name"));
+				user.setMobileNo(resultSet.getString("mobileNo"));
+				user.setEmailId(resultSet.getString("emailId"));
+				user.setUsername(resultSet.getString("username"));
+				user.setPassword(resultSet.getString("password"));
+				user.setUserImage(resultSet.getString("userImage"));
+
+				return user;
+			} else {
+				user = null;
+				return user;
+			}
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+			return user;
+
+		} finally {
+			try {
+				if (resultSet != null)
+					resultSet.close();
+				if (cstatement != null)
+					cstatement.close();
+				if (connection != null)
+					connection.close();
+			} catch (Exception e) {
+				e.printStackTrace();
+				// TODO: handle exception
+			}
+		}
+	}
+
+	public boolean checkEmailIdUsedByOtherUser(String emailid, int userId) {
+		Connection connection = DBConnection.getConnection();
+		CallableStatement cstatement = null;
+		ResultSet resultSet = null;
+
+		try {
+
+			cstatement = connection.prepareCall("{CALL User_CheckEmailIdUsed(?,?)}");
+			cstatement.setString("p_emailId", emailid);
+			cstatement.setInt("p_userId", userId);
+			resultSet = cstatement.executeQuery();
+			boolean result = false;
+			if (resultSet.next()) {
+				if (resultSet.getInt(1) > 0) {
+					return true;
+				}
+				return result;
+			} else {
+				return false;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+
+		} finally {
+			try {
+				if (resultSet != null)
+					resultSet.close();
+				if (cstatement != null)
+					cstatement.close();
 				if (connection != null)
 					connection.close();
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
-
 	}
 
 }

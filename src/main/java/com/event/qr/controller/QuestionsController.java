@@ -13,57 +13,50 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 
 import com.event.qr.util.ResponseObject;
 import com.event.qr.util.ResponseList;
-import com.event.qr.util.ResponseCodes;
 
-import com.event.qr.service.UserService;
-import com.event.qr.model.User;
+import com.event.qr.service.QuestionsService;
+import com.event.qr.model.Questions;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import java.util.ArrayList;
 
 @RestController
 @CrossOrigin(origins = "*", allowedHeaders = "*")
-@RequestMapping("/user")
-public class UserController {
+@RequestMapping("/questions")
+public class QuestionsController {
 
 	@Autowired
-	UserService userservice;
-	
-	@PostMapping("/login")
-	public ResponseObject<User> loginUser(@RequestBody User user) {
-
-		return userservice.getUserByMobileNo(user.getMobileNo());
-	}
+	QuestionsService questionsservice;
 
 	@PostMapping("/add")
-	public ResponseObject<User> saveUser(@RequestBody User user) {
+	public ResponseObject<Questions> saveQuestions(@RequestBody Questions questions) {
 
-		return userservice.saveUser(user);
+		return questionsservice.saveQuestions(questions);
 	}
 
 	@GetMapping("/getbyid")
-	public ResponseObject<User> getUserById(@RequestParam(value = "id", required = true) int id) {
+	public ResponseObject<Questions> getQuestionsById(@RequestParam(value = "id", required = true) int id) {
 
-		return userservice.getUserById(id);
+		return questionsservice.getQuestionsById(id);
 
 	}
 
 	@GetMapping("/listall")
-	public ResponseList<User> getUserListAll() {
+	public ResponseList<Questions> getQuestionsListAll() {
 
-		return userservice.getAllUsers();
+		return questionsservice.getAllQuestionss();
 	}
 
 	@PutMapping("/update")
-	public ResponseObject<User> updateUser(@RequestBody User user) {
+	public ResponseObject<Questions> updateQuestions(@RequestBody Questions questions) {
 
-		return userservice.updateUser(user);
+		return questionsservice.updateQuestions(questions);
 	}
 
 	@DeleteMapping("/delete")
-	public ResponseObject<User> deleteUserById(@RequestParam(value = "id", required = true) int id) {
+	public ResponseObject<Questions> deleteQuestionsById(@RequestParam(value = "id", required = true) int id) {
 
-		return userservice.deleteUserById(id);
+		return questionsservice.deleteQuestionsById(id);
 
 	}
 

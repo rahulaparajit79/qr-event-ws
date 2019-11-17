@@ -10,6 +10,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 import com.event.qr.model.Event;
 import com.event.qr.util.DateUtil;
@@ -23,13 +24,13 @@ public class EventDAO {
 		CallableStatement cstatement = null;
 		try {
 			connection = DBConnection.getConnection();
-			cstatement = connection.prepareCall("{ CALL Event_AddDetails(?,?,?,?,?)}");
+			cstatement = connection.prepareCall("{ CALL Event_AddDetails(?,?,?,?)}");
 
 			cstatement.setString("p_eventName", event.getEventName());
 			cstatement.setString("p_eventDesc", event.getEventDesc());
 
-			cstatement.setDate("p_eventStartTime", DateUtil.javaToSql(event.getEventStartTime()));
-			cstatement.setDate("p_eventEndTime", DateUtil.javaToSql(event.getEventEndTime()));
+			cstatement.setString("p_eventStartTime", DateUtil.javaDateToSqlDateTimeString(event.getEventStartTime()));
+			cstatement.setString("p_eventEndTime", DateUtil.javaDateToSqlDateTimeString(event.getEventEndTime()));
 
 			cstatement.executeQuery();
 
@@ -42,6 +43,8 @@ public class EventDAO {
 
 		} finally {
 			try {
+				if (cstatement != null)
+					cstatement.close();
 				if (connection != null)
 					connection.close();
 			} catch (Exception e) {
@@ -67,9 +70,8 @@ public class EventDAO {
 				event.setId(resultSet.getInt("id"));
 				event.setEventName(resultSet.getString("eventName"));
 				event.setEventDesc(resultSet.getString("eventDesc"));
-
-				event.setEventStartTime(resultSet.getDate("eventStartTime"));
-				event.setEventEndTime(resultSet.getDate("eventEndTime"));
+				event.setEventStartTime(DateUtil.sqlDateTimeToJavaDate(resultSet.getString("eventStartTime")));
+				event.setEventEndTime(DateUtil.sqlDateTimeToJavaDate(resultSet.getString("eventEndTime")));
 
 				eventList.add(event);
 
@@ -115,9 +117,8 @@ public class EventDAO {
 				event.setId(resultSet.getInt("id"));
 				event.setEventName(resultSet.getString("eventName"));
 				event.setEventDesc(resultSet.getString("eventDesc"));
-
-				event.setEventStartTime(resultSet.getDate("eventStartTime"));
-				event.setEventEndTime(resultSet.getDate("eventEndTime"));
+				event.setEventStartTime(DateUtil.sqlDateTimeToJavaDate(resultSet.getString("eventStartTime")));
+				event.setEventEndTime(DateUtil.sqlDateTimeToJavaDate(resultSet.getString("eventEndTime")));
 
 				return event;
 			} else {
@@ -127,11 +128,97 @@ public class EventDAO {
 		} catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();
-			event = new Event();
 			return event;
 
 		} finally {
 			try {
+				if (connection != null)
+					connection.close();
+			} catch (Exception e) {
+				e.printStackTrace();
+				// TODO: handle exception
+			}
+		}
+	}
+
+	public Event getEventByEventName(String eventName) {
+		Connection connection = DBConnection.getConnection();
+		CallableStatement cstatement = null;
+		ResultSet resultSet = null;
+		Event event = null;
+
+		try {
+
+			cstatement = connection.prepareCall("{CALL Event_SelectByEventName(?)}");
+			cstatement.setString("p_eventName", eventName);
+			resultSet = cstatement.executeQuery();
+
+			if (resultSet.next()) {
+				event = new Event();
+
+				event.setId(resultSet.getInt("id"));
+				event.setEventName(resultSet.getString("eventName"));
+				event.setEventDesc(resultSet.getString("eventDesc"));
+				event.setEventStartTime(DateUtil.sqlDateTimeToJavaDate(resultSet.getString("eventStartTime")));
+				event.setEventEndTime(DateUtil.sqlDateTimeToJavaDate(resultSet.getString("eventEndTime")));
+
+				return event;
+			} else {
+				event = null;
+				return event;
+			}
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+			return event;
+
+		} finally {
+			try {
+				if (resultSet != null)
+					resultSet.close();
+				if (cstatement != null)
+					cstatement.close();
+				if (connection != null)
+					connection.close();
+			} catch (Exception e) {
+				e.printStackTrace();
+				// TODO: handle exception
+			}
+		}
+	}
+
+	public int getEventCountBetweenTime(Date startTime, Date endTime) {
+		Connection connection = DBConnection.getConnection();
+		CallableStatement cstatement = null;
+		ResultSet resultSet = null;
+		int count = 0;
+
+		try {
+
+			cstatement = connection.prepareCall("{CALL Event_GetCountBetweenTime(?,?)}");
+			cstatement.setString("p_eventStartTime", DateUtil.javaDateToSqlDateTimeString(startTime));
+			cstatement.setString("p_eventEndTime", DateUtil.javaDateToSqlDateTimeString(endTime));
+			resultSet = cstatement.executeQuery();
+
+			if (resultSet.next()) {
+
+				count = resultSet.getInt(1);
+
+				return count;
+			} else {
+				return count;
+			}
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+			return -1;
+
+		} finally {
+			try {
+				if (resultSet != null)
+					resultSet.close();
+				if (cstatement != null)
+					cstatement.close();
 				if (connection != null)
 					connection.close();
 			} catch (Exception e) {
@@ -147,11 +234,10 @@ public class EventDAO {
 
 		try {
 
-			cstatement = connection.prepareCall("{CALL Event_UpdateById(?,?,?,?,?,?)}");
+			cstatement = connection.prepareCall("{CALL Event_UpdateById(?,?,?,?,?)}");
 			cstatement.setInt("p_id", event.getId());
 			cstatement.setString("p_eventName", event.getEventName());
 			cstatement.setString("p_eventDesc", event.getEventDesc());
-
 			cstatement.setDate("p_eventStartTime", DateUtil.javaToSql(event.getEventStartTime()));
 			cstatement.setDate("p_eventEndTime", DateUtil.javaToSql(event.getEventEndTime()));
 

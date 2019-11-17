@@ -19,6 +19,17 @@ public class EventService {
 	public ResponseObject<Event> saveEvent(Event event) {
 
 		ResponseObject<Event> responseObject = new ResponseObject<>();
+
+		String status = validateEvent(event);
+
+		if (!status.equals("OK")) {
+			responseObject.setResponseCode(ResponseCodes.FAILURE.getResponseCode());
+			responseObject.setResponseDesc(status);
+			responseObject.setResponseData(event);
+
+			return responseObject;
+		}
+
 		if (eventdao.saveEvent(event)) {
 
 			responseObject.setResponseCode(ResponseCodes.SUCCESS.getResponseCode());
@@ -92,6 +103,16 @@ public class EventService {
 	public ResponseObject<Event> updateEvent(Event event) {
 
 		ResponseObject<Event> responseObject = new ResponseObject<>();
+		
+		String status = validateUpdatedEvent(event);
+		if(!status.equals("OK")) {
+			responseObject.setResponseCode(ResponseCodes.FAILURE.getResponseCode());
+			responseObject.setResponseDesc(status);
+			responseObject.setResponseData(event);
+
+			return responseObject;
+		}
+		
 		if (eventdao.updateEvent(event)) {
 
 			responseObject.setResponseCode(ResponseCodes.SUCCESS.getResponseCode());
@@ -133,6 +154,50 @@ public class EventService {
 
 		}
 
+	}
+
+	private String validateEvent(Event event) {
+		String status = "OK";
+
+		if (event.getEventName() == null || event.getEventName().trim().isEmpty()) {
+			return status = "Please provide event name.";
+		}
+		if(eventdao.getEventByEventName(event.getEventName().trim())!=null) {
+			return status = "Event with the same name already present.";
+		}
+		if (event.getEventDesc() == null || event.getEventDesc().trim().isEmpty()) {
+			return status = "Please provide event description.";
+		}
+		if (event.getEventStartTime() == null) {
+			return status = "Please provide event start time.";
+		}
+		if (event.getEventEndTime() == null) {
+			return status = "Please provide event end time.";
+		}
+		if(event.getEventEndTime().before(event.getEventStartTime())) {
+			return status = "End time cannot be before start time.";
+		}
+		if(event.getEventStartTime().after(event.getEventEndTime())) {
+			return status = "Start time cannot be after end time.";
+		}
+		int count = (eventdao.getEventCountBetweenTime(event.getEventStartTime(), event.getEventEndTime()));
+		if(count == -1) {
+			return status = "Problem checking event between time.";
+		}else if(count > 0) {
+			return status = "An event is already scheduled between this time span, "
+					+ "please choose other time span.";
+		}
+		return status;
+	}
+	
+	private String validateUpdatedEvent(Event event) {
+		
+		if(event.getId() == 0) {
+			return "Please provide eventId"; 
+		}else {
+			return validateEvent(event);
+		}
+		
 	}
 
 }

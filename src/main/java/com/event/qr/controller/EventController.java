@@ -86,44 +86,40 @@ public class EventController {
 	public ResponseObject<String> scanqr(@RequestBody String encodedImg) {
 
 		ResponseObject<String> response = new ResponseObject<>();
-//		Base64EncoderDecoder base64 = new Base64EncoderDecoder();
-//		byte[] decodedImg = Base64EncoderDecoder.decode(encodedImg); //Base64.getDecoder().decode(encodedImg.getBytes(StandardCharsets.UTF_8));
-		byte[] decodedImg = DatatypeConverter.parseBase64Binary(encodedImg);
+
 		File imgFile = null;
-		
-			try {
-				imgFile=File.createTempFile("qrImage", ".png");
-				System.out.println(imgFile.getAbsolutePath());
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		
-		Path destinationFile = imgFile.toPath();
+
 		try {
+			imgFile = File.createTempFile("qrImage", ".png");
+			Path destinationFile = imgFile.toPath();
+			byte[] decodedImg = DatatypeConverter.parseBase64Binary(encodedImg);
 			Files.write(destinationFile, decodedImg);
-			
 			String result = decodeQRCode(imgFile);
 			response.setResponseCode(ResponseCodes.SUCCESS.getResponseCode());
 			response.setResponseData(result);
 			response.setResponseDesc(result);
-			
 			imgFile.delete();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
+
+			response.setResponseCode(ResponseCodes.FAILURE.getResponseCode());
+			response.setResponseDesc(e.getMessage());
+			return response;
+		}catch(Exception e) {
+			response.setResponseCode(ResponseCodes.FAILURE.getResponseCode());
+			response.setResponseDesc(e.getMessage());
+			return response;
 		}
 
 		return response;
 	}
 
-	private static String decodeQRCode(File qrCodeimage)  {
+	private static String decodeQRCode(File qrCodeimage) {
 		try {
-		BufferedImage bufferedImage = ImageIO.read(qrCodeimage);
-		LuminanceSource source = new BufferedImageLuminanceSource(bufferedImage);
-		BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
+			BufferedImage bufferedImage = ImageIO.read(qrCodeimage);
+			LuminanceSource source = new BufferedImageLuminanceSource(bufferedImage);
+			BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
 
-		
 			Result result = new MultiFormatReader().decode(bitmap);
 			return result.getText();
 		} catch (NotFoundException e) {
@@ -132,7 +128,7 @@ public class EventController {
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			
+
 			return e.getMessage();
 		}
 	}
