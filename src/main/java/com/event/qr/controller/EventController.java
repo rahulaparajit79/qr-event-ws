@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.event.qr.model.Base64QR;
 import com.event.qr.model.Event;
 import com.event.qr.service.EventService;
 import com.event.qr.util.Base64EncoderDecoder;
@@ -83,10 +84,10 @@ public class EventController {
 	}
 
 	@PostMapping("/scanqr")
-	public ResponseObject<String> scanqr(@RequestBody String encodedImg) {
+	public ResponseObject<String> scanqr(@RequestBody Base64QR base64qr) {
 
 		ResponseObject<String> response = new ResponseObject<>();
-
+		String encodedImg = base64qr.getQrCode();
 		File imgFile = null;
 
 		try {
@@ -105,7 +106,7 @@ public class EventController {
 			response.setResponseCode(ResponseCodes.FAILURE.getResponseCode());
 			response.setResponseDesc(e.getMessage());
 			return response;
-		}catch(Exception e) {
+		} catch (Exception e) {
 			response.setResponseCode(ResponseCodes.FAILURE.getResponseCode());
 			response.setResponseDesc(e.getMessage());
 			return response;
