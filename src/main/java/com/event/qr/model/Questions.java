@@ -9,6 +9,7 @@ public class Questions {
 	private String answer;
 	private Date startTime;
 	private Date endTime;
+	private boolean bonusQuestion;
 
 	public int getId() {
 		return id;
@@ -57,5 +58,15 @@ public class Questions {
 	public void setEndTime(Date endtime) {
 		this.endTime = endtime;
 	}
+
+	public boolean isBonusQuestion() {
+		return bonusQuestion;
+	}
+
+	public void setBonusQuestion(boolean bonusQuestion) {
+		this.bonusQuestion = bonusQuestion;
+	}
+
+	
 
 }

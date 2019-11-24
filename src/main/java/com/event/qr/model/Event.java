@@ -2,13 +2,13 @@ package com.event.qr.model;
 
 import java.util.Date;
 
-
 public class Event {
 	private int id;
 	private String eventName;
 	private String eventDesc;
 	private Date eventStartTime;
 	private Date eventEndTime;
+	private String eventStatus;
 
 	public int getId() {
 		return id;
@@ -48,6 +48,14 @@ public class Event {
 
 	public void setEventEndTime(Date eventendtime) {
 		this.eventEndTime = eventendtime;
+	}
+
+	public String getEventStatus() {
+		return eventStatus;
+	}
+
+	public void setEventStatus(String eventStatus) {
+		this.eventStatus = eventStatus;
 	}
 
 }

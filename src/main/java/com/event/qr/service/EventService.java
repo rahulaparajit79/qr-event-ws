@@ -72,6 +72,29 @@ public class EventService {
 		}
 		return responseList;
 	}
+	
+	public ResponseList<Event> getAllPendingEvents() {
+
+		ResponseList<Event> responseList = null;
+		ArrayList<Event> eventList = null;
+
+		eventList = eventdao.getAllPendingEvents();
+
+		if (eventList.isEmpty()) {
+
+			responseList = new ResponseList<>();
+			responseList.setResponseCode(ResponseCodes.FAILURE.getResponseCode());
+			responseList.setResponseDesc("Failed to get all records");
+			responseList.setList(eventList);
+		} else {
+
+			responseList = new ResponseList<>();
+			responseList.setResponseCode(ResponseCodes.SUCCESS.getResponseCode());
+			responseList.setResponseDesc("All records fetched successfully");
+			responseList.setList(eventList);
+		}
+		return responseList;
+	}
 
 	public ResponseObject<Event> getEventById(int id) {
 
@@ -103,16 +126,16 @@ public class EventService {
 	public ResponseObject<Event> updateEvent(Event event) {
 
 		ResponseObject<Event> responseObject = new ResponseObject<>();
-		
+
 		String status = validateUpdatedEvent(event);
-		if(!status.equals("OK")) {
+		if (!status.equals("OK")) {
 			responseObject.setResponseCode(ResponseCodes.FAILURE.getResponseCode());
 			responseObject.setResponseDesc(status);
 			responseObject.setResponseData(event);
 
 			return responseObject;
 		}
-		
+
 		if (eventdao.updateEvent(event)) {
 
 			responseObject.setResponseCode(ResponseCodes.SUCCESS.getResponseCode());
@@ -130,6 +153,77 @@ public class EventService {
 			return responseObject;
 
 		}
+	}
+
+	public ResponseObject<Event> activateEvent(Event event) {
+
+		ResponseObject<Event> responseObject = new ResponseObject<>();
+
+		if (event==null || event.getId() == 0) {
+			responseObject.setResponseCode(ResponseCodes.FAILURE.getResponseCode());
+			responseObject.setResponseDesc("Event id missing.");
+			responseObject.setResponseData(event);
+
+			return responseObject;
+		}
+
+		if (eventdao.getActiveEvent() == null) {
+
+			if (eventdao.setEventStatusActive(event.getId())) {
+
+				responseObject.setResponseCode(ResponseCodes.SUCCESS.getResponseCode());
+				responseObject.setResponseDesc("Event activated successfully");
+				responseObject.setResponseData(event);
+
+				return responseObject;
+
+			} else {
+
+				responseObject.setResponseCode(ResponseCodes.FAILURE.getResponseCode());
+				responseObject.setResponseDesc("Failed to activate event");
+				responseObject.setResponseData(event);
+
+				return responseObject;
+
+			}
+		} else {
+			responseObject.setResponseCode(ResponseCodes.FAILURE.getResponseCode());
+			responseObject.setResponseDesc("There is already a active event");
+			responseObject.setResponseData(event);
+			return responseObject;
+		}
+	}
+	
+	public ResponseObject<Event> disableEvent(Event event) {
+
+		ResponseObject<Event> responseObject = new ResponseObject<>();
+
+		if (event==null || event.getId() == 0) {
+			responseObject.setResponseCode(ResponseCodes.FAILURE.getResponseCode());
+			responseObject.setResponseDesc("Event id missing.");
+			responseObject.setResponseData(event);
+
+			return responseObject;
+		}
+
+	
+			if (eventdao.setEventStatusDisable(event.getId())) {
+
+				responseObject.setResponseCode(ResponseCodes.SUCCESS.getResponseCode());
+				responseObject.setResponseDesc("Event disabled successfully");
+				responseObject.setResponseData(event);
+
+				return responseObject;
+
+			} else {
+				responseObject.setResponseCode(ResponseCodes.FAILURE.getResponseCode());
+				responseObject.setResponseDesc("Failed to disable event");
+				responseObject.setResponseData(event);
+
+				return responseObject;
+
+			}
+		
 	}
 
 	public ResponseObject<Event> deleteEventById(int id) {
@@ -156,6 +250,33 @@ public class EventService {
 
 	}
 
+	public ResponseObject<Event> getCurrentEvent() {
+
+		ResponseObject<Event> responseObject = new ResponseObject<>();
+		Event event = null;
+
+		event = eventdao.getActiveEvent();
+
+		if (event != null) {
+
+			responseObject.setResponseCode(ResponseCodes.SUCCESS.getResponseCode());
+			responseObject.setResponseDesc("Record found");
+			responseObject.setResponseData(event);
+
+			return responseObject;
+		} else {
+
+			event = null;
+
+			responseObject.setResponseCode(ResponseCodes.NOT_FOUND.getResponseCode());
+			responseObject.setResponseDesc("Record not found ");
+			responseObject.setResponseData(event);
+
+			return responseObject;
+		}
+
+	}
+	
 	private String validateEvent(Event event) {
 		String status = "OK";
 
@@ -189,15 +310,15 @@ public class EventService {
 		}
 		return status;
 	}
-	
+
 	private String validateUpdatedEvent(Event event) {
-		
-		if(event.getId() == 0) {
-			return "Please provide eventId"; 
-		}else {
+
+		if (event.getId() == 0) {
+			return "Please provide eventId";
+		} else {
 			return validateEvent(event);
 		}
-		
+
 	}
 
 }

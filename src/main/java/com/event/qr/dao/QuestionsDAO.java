@@ -10,6 +10,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import com.event.qr.model.Questions;
 import com.event.qr.util.DateUtil;
@@ -23,14 +24,14 @@ public class QuestionsDAO {
 		CallableStatement cstatement = null;
 		try {
 			connection = DBConnection.getConnection();
-			cstatement = connection.prepareCall("{ CALL Questions_AddDetails(?,?,?,?,?)}");
+			cstatement = connection.prepareCall("{ CALL Questions_AddDetails(?,?,?,?,?,?)}");
 
 			cstatement.setInt("p_eventId", questions.getEventId());
 			cstatement.setString("p_questionText", questions.getQuestionText());
 			cstatement.setString("p_answer", questions.getAnswer());
 			cstatement.setDate("p_startTime", DateUtil.javaToSql(questions.getStartTime()));
 			cstatement.setDate("p_endTime", DateUtil.javaToSql(questions.getEndTime()));
-
+			cstatement.setBoolean("p_isQuestionBonus", questions.isBonusQuestion());
 			cstatement.executeQuery();
 
 			return true;
@@ -68,8 +69,8 @@ public class QuestionsDAO {
 				questions.setEventId(resultSet.getInt("eventId"));
 				questions.setQuestionText(resultSet.getString("questionText"));
 				questions.setAnswer(resultSet.getString("answer"));
-				questions.setStartTime(DateUtil.sqlDateTimeToJavaDate(resultSet.getString("startTime")));
-				questions.setEndTime(DateUtil.sqlDateTimeToJavaDate(resultSet.getString("endTime")));
+				questions.setBonusQuestion(resultSet.getBoolean("isQuestionBonus"));
+				
 
 				questionsList.add(questions);
 
@@ -116,8 +117,7 @@ public class QuestionsDAO {
 				questions.setEventId(resultSet.getInt("eventId"));
 				questions.setQuestionText(resultSet.getString("questionText"));
 				questions.setAnswer(resultSet.getString("answer"));
-				questions.setStartTime(DateUtil.sqlDateTimeToJavaDate(resultSet.getString("startTime")));
-				questions.setEndTime(DateUtil.sqlDateTimeToJavaDate(resultSet.getString("endTime")));
+				questions.setBonusQuestion(resultSet.getBoolean("isQuestionBonus"));
 
 				return questions;
 			} else {
@@ -129,6 +129,46 @@ public class QuestionsDAO {
 			e.printStackTrace();
 			questions = new Questions();
 			return questions;
+
+		} finally {
+			try {
+				if (connection != null)
+					connection.close();
+			} catch (Exception e) {
+				e.printStackTrace();
+				// TODO: handle exception
+			}
+		}
+	}
+	
+	public List<Questions> getQuestionsByEventId(int eventId) {
+		Connection connection = DBConnection.getConnection();
+		CallableStatement cstatement = null;
+List<Questions> qlist = new ArrayList<Questions>();
+		Questions questions = null;
+
+		try {
+
+			cstatement = connection.prepareCall("{CALL Questions_SelectByEventID(?)}");
+			cstatement.setInt("p_eventId", eventId);
+			ResultSet resultSet = cstatement.executeQuery();
+
+			while (resultSet.next()) {
+				questions = new Questions();
+
+				questions.setId(resultSet.getInt("id"));
+				questions.setEventId(resultSet.getInt("eventId"));
+				questions.setQuestionText(resultSet.getString("questionText"));
+				questions.setAnswer(resultSet.getString("answer"));
+				questions.setBonusQuestion(resultSet.getBoolean("isQuestionBonus"));
+
+				qlist.add(questions);
+			}
+			return qlist;
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+			return qlist;
 
 		} finally {
 			try {

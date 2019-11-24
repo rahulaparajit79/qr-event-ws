@@ -69,11 +69,35 @@ public class EventController {
 
 		return eventservice.getAllEvents();
 	}
+	
+	@GetMapping("/listall/pending")
+	public ResponseList<Event> getEventListAllPending() {
 
-	@PutMapping("/update")
+		return eventservice.getAllPendingEvents();
+	}
+
+	@PostMapping("/update")
 	public ResponseObject<Event> updateEvent(@RequestBody Event event) {
 
 		return eventservice.updateEvent(event);
+	}
+	
+	@PostMapping("/activate")
+	public ResponseObject<Event> activateEvent(@RequestBody Event event) {
+
+		return eventservice.activateEvent(event);
+	}
+	
+	@GetMapping("/current")
+	public ResponseObject<Event> getCurrentEvent() {
+
+		return eventservice.getCurrentEvent();
+	}
+	
+	@PostMapping("/disable")
+	public ResponseObject<Event> disableEvent(@RequestBody Event event) {
+
+		return eventservice.disableEvent(event);
 	}
 
 	@DeleteMapping("/delete")
