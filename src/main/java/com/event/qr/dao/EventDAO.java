@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import com.event.qr.model.Event;
+import com.event.qr.model.UserScore;
 import com.event.qr.util.DateUtil;
 
 @Service
@@ -99,6 +100,105 @@ public class EventDAO {
 
 	}
 
+	public ArrayList<UserScore> getEventWinner(int eventId) {
+
+		Connection connection = DBConnection.getConnection();
+		ResultSet resultSet = null;
+		CallableStatement cstatement = null;
+
+		UserScore user = null;
+		ArrayList<UserScore> userList = new ArrayList<>();
+
+		try {
+			cstatement = connection.prepareCall("{CALL Event_WinnerByEvent(?)}");
+			cstatement.setInt("p_eventId",eventId);
+			resultSet = cstatement.executeQuery();
+			int rank = 1;
+			while (resultSet.next()) {
+				user = new UserScore();
+				user.setUserId(resultSet.getInt("userId"));
+				user.setMobileNo(resultSet.getString("mobileNo"));
+				user.setPartyId(resultSet.getInt("partyId"));
+				user.setScore(resultSet.getInt("score"));
+				user.setUsername(resultSet.getString("name"));
+				user.setRank(rank);
+
+				userList.add(user);
+				rank++;
+
+			}
+			return userList;
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			userList = null;
+			return userList;
+
+		} finally {
+			try {
+				if (connection != null)
+					connection.close();
+				if (resultSet != null)
+					resultSet.close();
+				if (cstatement != null) {
+					cstatement.close();
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+
+	}
+	
+	public ArrayList<UserScore> getAllEventWinner() {
+
+		Connection connection = DBConnection.getConnection();
+		ResultSet resultSet = null;
+		CallableStatement cstatement = null;
+
+		UserScore user = null;
+		ArrayList<UserScore> userList = new ArrayList<>();
+
+		try {
+			cstatement = connection.prepareCall("{CALL Event_WinnerAllEvent()}");
+			
+			int rank = 1;
+			while (resultSet.next()) {
+				user = new UserScore();
+				user.setUserId(resultSet.getInt("userId"));
+				user.setMobileNo(resultSet.getString("mobileNo"));
+				user.setPartyId(resultSet.getInt("partyId"));
+				user.setScore(resultSet.getInt("score"));
+				user.setUsername(resultSet.getString("name"));
+				user.setRank(rank);
+
+				userList.add(user);
+				rank++;
+
+			}
+			return userList;
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			userList = null;
+			return userList;
+
+		} finally {
+			try {
+				if (connection != null)
+					connection.close();
+				if (resultSet != null)
+					resultSet.close();
+				if (cstatement != null) {
+					cstatement.close();
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+
+	}
+
 	public ArrayList<Event> getAllPendingEvents() {
 
 		Connection connection = DBConnection.getConnection();
@@ -110,6 +210,52 @@ public class EventDAO {
 
 		try {
 			cstatement = connection.prepareCall("{CALL Event_SelectAllPending()}");
+			resultSet = cstatement.executeQuery();
+			while (resultSet.next()) {
+				event = new Event();
+				event.setId(resultSet.getInt("id"));
+				event.setEventName(resultSet.getString("eventName"));
+				event.setEventDesc(resultSet.getString("eventDesc"));
+				event.setEventStartTime(DateUtil.sqlDateTimeToJavaDate(resultSet.getString("eventStartTime")));
+				event.setEventEndTime(DateUtil.sqlDateTimeToJavaDate(resultSet.getString("eventEndTime")));
+				event.setEventStatus(resultSet.getString("eventStatus"));
+				eventList.add(event);
+
+			}
+			return eventList;
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			eventList = null;
+			return eventList;
+
+		} finally {
+			try {
+				if (connection != null)
+					connection.close();
+				if (resultSet != null)
+					resultSet.close();
+				if (cstatement != null) {
+					cstatement.close();
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+
+	}
+	
+	public ArrayList<Event> getAllClosedEvents() {
+
+		Connection connection = DBConnection.getConnection();
+		ResultSet resultSet = null;
+		CallableStatement cstatement = null;
+
+		Event event = null;
+		ArrayList<Event> eventList = new ArrayList<>();
+
+		try {
+			cstatement = connection.prepareCall("{CALL Event_SelectAllClosed()}");
 			resultSet = cstatement.executeQuery();
 			while (resultSet.next()) {
 				event = new Event();

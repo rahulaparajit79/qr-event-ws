@@ -49,6 +49,7 @@ public class QuestionsService {
 			responseObject.setResponseDesc(status);
 			return responseObject;
 		}
+		System.out.println(questions.getAnswer());
 
 		String qrValue = decodeQRCode(questions.getAnswer());
 

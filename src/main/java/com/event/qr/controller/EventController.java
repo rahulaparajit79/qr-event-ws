@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.event.qr.model.Base64QR;
 import com.event.qr.model.Event;
+import com.event.qr.model.UserScore;
 import com.event.qr.service.EventService;
 import com.event.qr.util.Base64EncoderDecoder;
 import com.event.qr.util.ResponseCodes;
@@ -75,6 +76,12 @@ public class EventController {
 
 		return eventservice.getAllPendingEvents();
 	}
+	
+	@GetMapping("/listall/closed")
+	public ResponseList<Event> getEventListAllClosed() {
+
+		return eventservice.getAllClosedEvents();
+	}
 
 	@PostMapping("/update")
 	public ResponseObject<Event> updateEvent(@RequestBody Event event) {
@@ -105,6 +112,18 @@ public class EventController {
 
 		return eventservice.deleteEventById(id);
 
+	}
+	
+	@GetMapping("/winners/allevents")
+	public ResponseList<UserScore> getAllEventWinners() {
+
+		return eventservice.getAllEventWinner();
+	}
+	
+	@GetMapping("/winners/getbyeventid")
+	public ResponseList<UserScore> getEventWinners(@RequestParam(value = "eventId") int eventId) {
+
+		return eventservice.getWinnerByEvent(eventId);
 	}
 
 	@PostMapping("/scanqr")
