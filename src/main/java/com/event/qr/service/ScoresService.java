@@ -1,14 +1,15 @@
 package com.event.qr.service;
 
+import java.util.ArrayList;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.event.qr.util.ResponseObject;
+
+import com.event.qr.dao.ScoresDAO;
+import com.event.qr.model.Scores;
 import com.event.qr.util.ResponseCodes;
 import com.event.qr.util.ResponseList;
-import com.event.qr.model.Scores;
-import com.event.qr.dao.ScoresDAO;
-
-import java.util.ArrayList;
+import com.event.qr.util.ResponseObject;
 
 @Service
 public class ScoresService {
@@ -89,6 +90,33 @@ public class ScoresService {
 
 	}
 
+	public ResponseObject<Scores> getUserTotalScoresById(int userId) {
+
+		ResponseObject<Scores> responseObject = new ResponseObject<>();
+		Scores scores = null;
+
+		scores = scoresdao.getUserScoresByUserId(userId);
+
+		if (scores != null) {
+
+			responseObject.setResponseCode(ResponseCodes.SUCCESS.getResponseCode());
+			responseObject.setResponseDesc("Record found");
+			responseObject.setResponseData(scores);
+
+			return responseObject;
+		} else {
+
+			scores = null;
+
+			responseObject.setResponseCode(ResponseCodes.NOT_FOUND.getResponseCode());
+			responseObject.setResponseDesc("Record not found ");
+			responseObject.setResponseData(scores);
+
+			return responseObject;
+		}
+
+	}
+
 	public ResponseObject<Scores> updateScores(Scores scores) {
 
 		ResponseObject<Scores> responseObject = new ResponseObject<>();
@@ -132,7 +160,7 @@ public class ScoresService {
 		}
 
 	}
-	
-	
+
+
 
 }

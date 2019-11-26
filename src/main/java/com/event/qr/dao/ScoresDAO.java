@@ -1,16 +1,13 @@
 package com.event.qr.dao;
 
-import org.springframework.stereotype.Service;
-import com.event.qr.db.DBConnection;
-
-import java.sql.Connection;
 import java.sql.CallableStatement;
-import java.sql.PreparedStatement;
+import java.sql.Connection;
 import java.sql.ResultSet;
-import java.sql.SQLException;
-
 import java.util.ArrayList;
 
+import org.springframework.stereotype.Service;
+
+import com.event.qr.db.DBConnection;
 import com.event.qr.model.Scores;
 
 @Service
@@ -202,7 +199,44 @@ public class ScoresDAO {
 				return scores;
 			}
 		} catch (Exception e) {
-			// TODO: handle exception
+			e.printStackTrace();
+			scores = new Scores();
+			return scores;
+
+		} finally {
+			try {
+				if (connection != null)
+					connection.close();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	public Scores getUserScoresByUserId(int userId) {
+		Connection connection = DBConnection.getConnection();
+		CallableStatement cstatement = null;
+
+		Scores scores = null;
+
+		try {
+
+			cstatement = connection.prepareCall("{CALL Scores_TotalScoreByUserId(?)}");
+			cstatement.setInt("p_userId", userId);
+			ResultSet resultSet = cstatement.executeQuery();
+
+			if (resultSet.next()) {
+				scores = new Scores();
+
+				scores.setUserId(userId);
+				scores.setScore(resultSet.getDouble("totalScore"));
+
+				return scores;
+			} else {
+				scores = null;
+				return scores;
+			}
+		} catch (Exception e) {
 			e.printStackTrace();
 			scores = new Scores();
 			return scores;
