@@ -3,21 +3,16 @@ package com.event.qr.controller;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.Base64;
 
 import javax.imageio.ImageIO;
 import javax.xml.bind.DatatypeConverter;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -27,7 +22,6 @@ import com.event.qr.model.Base64QR;
 import com.event.qr.model.Event;
 import com.event.qr.model.UserScore;
 import com.event.qr.service.EventService;
-import com.event.qr.util.Base64EncoderDecoder;
 import com.event.qr.util.ResponseCodes;
 import com.event.qr.util.ResponseList;
 import com.event.qr.util.ResponseObject;
@@ -70,13 +64,13 @@ public class EventController {
 
 		return eventservice.getAllEvents();
 	}
-	
+
 	@GetMapping("/listall/pending")
 	public ResponseList<Event> getEventListAllPending() {
 
 		return eventservice.getAllPendingEvents();
 	}
-	
+
 	@GetMapping("/listall/closed")
 	public ResponseList<Event> getEventListAllClosed() {
 
@@ -88,38 +82,38 @@ public class EventController {
 
 		return eventservice.updateEvent(event);
 	}
-	
+
 	@PostMapping("/activate")
 	public ResponseObject<Event> activateEvent(@RequestBody Event event) {
 
 		return eventservice.activateEvent(event);
 	}
-	
+
 	@GetMapping("/current")
 	public ResponseObject<Event> getCurrentEvent() {
 
 		return eventservice.getCurrentEvent();
 	}
-	
+
 	@PostMapping("/disable")
 	public ResponseObject<Event> disableEvent(@RequestBody Event event) {
 
 		return eventservice.disableEvent(event);
 	}
 
-	@DeleteMapping("/delete")
+	@PostMapping("/delete")
 	public ResponseObject<Event> deleteEventById(@RequestParam(value = "id", required = true) int id) {
 
 		return eventservice.deleteEventById(id);
 
 	}
-	
+
 	@GetMapping("/winners/allevents")
 	public ResponseList<UserScore> getAllEventWinners() {
 
 		return eventservice.getAllEventWinner();
 	}
-	
+
 	@GetMapping("/winners/getbyeventid")
 	public ResponseList<UserScore> getEventWinners(@RequestParam(value = "eventId") int eventId) {
 
