@@ -1,17 +1,14 @@
 package com.event.qr.dao;
 
-import org.springframework.stereotype.Service;
-import com.event.qr.db.DBConnection;
-
-import java.sql.Connection;
 import java.sql.CallableStatement;
-import java.sql.PreparedStatement;
+import java.sql.Connection;
 import java.sql.ResultSet;
-import java.sql.SQLException;
-
 import java.util.ArrayList;
 import java.util.Date;
 
+import org.springframework.stereotype.Service;
+
+import com.event.qr.db.DBConnection;
 import com.event.qr.model.Event;
 import com.event.qr.model.UserScore;
 import com.event.qr.util.DateUtil;
@@ -111,7 +108,7 @@ public class EventDAO {
 
 		try {
 			cstatement = connection.prepareCall("{CALL Event_WinnerByEvent(?)}");
-			cstatement.setInt("p_eventId",eventId);
+			cstatement.setInt("p_eventId", eventId);
 			resultSet = cstatement.executeQuery();
 			int rank = 1;
 			while (resultSet.next()) {
@@ -149,7 +146,7 @@ public class EventDAO {
 		}
 
 	}
-	
+
 	public ArrayList<UserScore> getAllEventWinner() {
 
 		Connection connection = DBConnection.getConnection();
@@ -161,7 +158,7 @@ public class EventDAO {
 
 		try {
 			cstatement = connection.prepareCall("{CALL Event_WinnerAllEvent()}");
-			
+
 			int rank = 1;
 			while (resultSet.next()) {
 				user = new UserScore();
@@ -244,7 +241,7 @@ public class EventDAO {
 		}
 
 	}
-	
+
 	public ArrayList<Event> getAllClosedEvents() {
 
 		Connection connection = DBConnection.getConnection();
@@ -570,11 +567,7 @@ public class EventDAO {
 			cstatement.setInt("p_eventId", eventId);
 			int result = cstatement.executeUpdate();
 
-			if (result > 0) {
-				return true;
-			} else {
-				return false;
-			}
+			return true;
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -597,13 +590,10 @@ public class EventDAO {
 		try {
 			cstatement = connection.prepareCall("{CALL Event_DeleteById(?)}");
 			cstatement.setInt("p_id", id);
-			boolean resultSet = cstatement.execute();
+			cstatement.execute();
 
-			if (resultSet) {
-				return true;
-			} else {
-				return false;
-			}
+			return true;
+
 		} catch (Exception e) {
 			e.printStackTrace();
 			return false;

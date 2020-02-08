@@ -1,23 +1,5 @@
 package com.event.qr.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import com.event.qr.util.ResponseObject;
-import com.google.zxing.BinaryBitmap;
-import com.google.zxing.LuminanceSource;
-import com.google.zxing.MultiFormatReader;
-import com.google.zxing.NotFoundException;
-import com.google.zxing.Result;
-import com.google.zxing.client.j2se.BufferedImageLuminanceSource;
-import com.google.zxing.common.HybridBinarizer;
-import com.event.qr.util.ResponseList;
-import com.event.qr.util.ResponseCodes;
-import com.event.qr.model.AnswerQr;
-import com.event.qr.model.Questions;
-import com.event.qr.model.Scores;
-import com.event.qr.dao.QuestionsDAO;
-import com.event.qr.dao.ScoresDAO;
-
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -29,6 +11,27 @@ import java.util.List;
 import javax.imageio.ImageIO;
 import javax.xml.bind.DatatypeConverter;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.event.qr.dao.EventDAO;
+import com.event.qr.dao.QuestionsDAO;
+import com.event.qr.dao.ScoresDAO;
+import com.event.qr.model.AnswerQr;
+import com.event.qr.model.Event;
+import com.event.qr.model.Questions;
+import com.event.qr.model.Scores;
+import com.event.qr.util.ResponseCodes;
+import com.event.qr.util.ResponseList;
+import com.event.qr.util.ResponseObject;
+import com.google.zxing.BinaryBitmap;
+import com.google.zxing.LuminanceSource;
+import com.google.zxing.MultiFormatReader;
+import com.google.zxing.NotFoundException;
+import com.google.zxing.Result;
+import com.google.zxing.client.j2se.BufferedImageLuminanceSource;
+import com.google.zxing.common.HybridBinarizer;
+
 @Service
 public class QuestionsService {
 
@@ -38,6 +41,8 @@ public class QuestionsService {
 	ScoresService scoresService;
 	@Autowired
 	ScoresDAO scoresDAO;
+	@Autowired
+	EventDAO eventDAO;
 
 	public ResponseObject<Questions> saveQuestions(Questions questions) {
 		ResponseObject<Questions> responseObject = new ResponseObject<>();
@@ -381,6 +386,11 @@ public class QuestionsService {
 		}
 		if (questions.getAnswer() == null || questions.getAnswer().trim().isEmpty()) {
 			return "Please provide answer.";
+		}
+		Event event = eventDAO.getActiveEvent();
+
+		if(event !=null) {
+			return "Another event is already active, please stop that event first.";
 		}
 
 		return status;
