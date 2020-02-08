@@ -1,0 +1,318 @@
+{
+	"info": {
+		"_postman_id": "d1d1cbba-dde2-4c6d-a027-e4aa73938cb6",
+		"name": "QREventApp",
+		"description": "http://eventapp-eventapp.apps.us-east-2.starter.openshift-online.com",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "/event/scanqr",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Basic NzM4NzE1NDE2MjpyYWh1bDEyMw=="
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "iVBORw0KGgoAAAANSUhEUgAAAV4AAAFeAQAAAADlUEq3AAABHklEQVR4Xu3Wwa7CMAxEUe/62eWzWSAVPE7SIXp6Yu87QsidnLKySuP6Pa/Ym38C9oA9YA/YA/aAPWBPG/yImUOXhz7fJbgprsvvYS/BXnbCuTa1P5N5CQaPvhoweMPPOJ9jBoPHZQ0fGXFu5QW28uqE81yp/VlbNEtwW+wp+UfAnjY4d2Ztztoi3XLfCG6LlXwtmcNZZ3pRATfHp9ZmzHp9rWYE3BgPL1k+jlykE9wZ60+nhszaokg/SnBL7MmjwvI51wH46ohzYSpro7ZHDbgtrksN+YmxPNmD2+MPiJI6Ws0dcHt86a8n/PECBgs/9ITJ7/lakr8AbozX4DjUg1vjmKld0i13wKtR2Qr/FLAH7AF7wB6wB+wBe8Ce1xuD1sBgEh/XUgAAAABJRU5ErkJggg=="
+				},
+				"url": {
+					"raw": "http://eventapp-eventapp.apps.us-east-2.starter.openshift-online.com/event/scanqr",
+					"protocol": "http",
+					"host": [
+						"eventapp-eventapp",
+						"apps",
+						"us-east-2",
+						"starter",
+						"openshift-online",
+						"com"
+					],
+					"path": [
+						"event",
+						"scanqr"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/event/listall",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "rahul123",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "7387154162",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://eventapp-eventapp.apps.us-east-2.starter.openshift-online.com/event/listall",
+					"protocol": "http",
+					"host": [
+						"eventapp-eventapp",
+						"apps",
+						"us-east-2",
+						"starter",
+						"openshift-online",
+						"com"
+					],
+					"path": [
+						"event",
+						"listall"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/user/add",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"name\": \"Rahul\",\n\t\"mobileNo\": \"9422918982\",\n\t\"emailId\": \"\",\n\t\"partyId\" : 1,\n\t\"password\" : \"poiuytr\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://eventapp-eventapp.apps.us-east-2.starter.openshift-online.com/user/add",
+					"protocol": "http",
+					"host": [
+						"eventapp-eventapp",
+						"apps",
+						"us-east-2",
+						"starter",
+						"openshift-online",
+						"com"
+					],
+					"path": [
+						"user",
+						"add"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/event/add",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "poiuytr",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "8668720791",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"eventName\" : \"Ring ceremony\",\n\t\"eventDesc\" : \"ring ceremony today in room no 102. Please come on time.\",\n\t\"eventStartTime\" : \"2019-11-22 17:00:00\",\n\t\"eventEndTime\" : \"2019-11-22 17:30:00\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://eventapp-eventapp.apps.us-east-2.starter.openshift-online.com/event/add",
+					"protocol": "http",
+					"host": [
+						"eventapp-eventapp",
+						"apps",
+						"us-east-2",
+						"starter",
+						"openshift-online",
+						"com"
+					],
+					"path": [
+						"event",
+						"add"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/event/update",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "poiuytr",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "8668720791",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"id\" : 1,\n\t\"eventName\" : \"Ring ceremony\",\n\t\"eventDesc\" : \"ring ceremony today in room no 102. Please come on time.\",\n\t\"eventStartTime\" : \"2019-11-22 17:00:00\",\n\t\"eventEndTime\" : \"2019-11-22 17:30:00\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/event/update",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"event",
+						"update"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/user/update",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"id\" : 1,\n\t\"name\": \"Rahul\",\n\t\"mobileNo\": \"9422918982\",\n\t\"emailId\": \"\",\n\t\"partyId\" : 1,\n\t\"password\" : \"poiuytr\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/user/update",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"user",
+						"update"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/user/login",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "poiuytr",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "8668720791",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"mobileNo\": \"7387154162\",\n\t\"password\" : \"rahul123\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://eventapp-eventapp.apps.us-east-2.starter.openshift-online.com/user/login",
+					"protocol": "http",
+					"host": [
+						"eventapp-eventapp",
+						"apps",
+						"us-east-2",
+						"starter",
+						"openshift-online",
+						"com"
+					],
+					"path": [
+						"user",
+						"login"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}

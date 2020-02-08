@@ -1,0 +1,212 @@
+{
+	"variables": [],
+	"info": {
+		"name": "WSAutomation",
+		"_postman_id": "e528cc44-a81f-83e9-965b-18a955b658de",
+		"description": "",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "/generatestoredproc/for_all_table",
+			"request": {
+				"url": "http://localhost:8080/generatestoredproc/for_all_table",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "hostname",
+							"value": "db4free.net",
+							"description": "",
+							"type": "text"
+						},
+						{
+							"key": "dbname",
+							"value": "event_db",
+							"description": "",
+							"type": "text"
+						},
+						{
+							"key": "username",
+							"value": "developer79",
+							"description": "",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "developer@123",
+							"description": "",
+							"type": "text"
+						},
+						{
+							"key": "directoryPath",
+							"value": "/home/rahul/Desktop",
+							"description": "",
+							"type": "text"
+						},
+						{
+							"key": "packageName",
+							"value": "com.event.qr",
+							"description": "",
+							"type": "text"
+						},
+						{
+							"key": "dbType",
+							"value": "mysql",
+							"description": "",
+							"type": "text"
+						}
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "/generatestoredproc/for_specific_table",
+			"request": {
+				"url": "http://localhost:8080/generatestoredproc/for_specific_tables",
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "hostname",
+							"value": "db4free.net",
+							"type": "text",
+							"description": ""
+						},
+						{
+							"key": "dbname",
+							"value": "event_db",
+							"type": "text",
+							"description": ""
+						},
+						{
+							"key": "username",
+							"value": "developer79",
+							"type": "text",
+							"description": ""
+						},
+						{
+							"key": "password",
+							"value": "developer@123",
+							"type": "text",
+							"description": ""
+						},
+						{
+							"key": "directoryPath",
+							"value": "/home/rahul/Desktop",
+							"type": "text",
+							"description": ""
+						},
+						{
+							"key": "packageName",
+							"value": "com.event.qr",
+							"type": "text",
+							"description": ""
+						},
+						{
+							"key": "dbType",
+							"value": "mysql",
+							"type": "text",
+							"description": ""
+						},
+						{
+							"key": "tableName",
+							"value": "scores",
+							"type": "text",
+							"description": ""
+						}
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "/generatestoredproc/for_specific_column",
+			"request": {
+				"url": "http://localhost:8080/generatestoredproc/for_specific_column",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "hostname",
+							"value": "db4free.net",
+							"type": "text",
+							"description": ""
+						},
+						{
+							"key": "dbname",
+							"value": "event_db",
+							"type": "text",
+							"description": ""
+						},
+						{
+							"key": "username",
+							"value": "developer79",
+							"type": "text",
+							"description": ""
+						},
+						{
+							"key": "password",
+							"value": "developer@123",
+							"type": "text",
+							"description": ""
+						},
+						{
+							"key": "directoryPath",
+							"value": "/home/rahul/Desktop",
+							"type": "text",
+							"description": ""
+						},
+						{
+							"key": "packageName",
+							"value": "com.event.qr",
+							"type": "text",
+							"description": ""
+						},
+						{
+							"key": "dbType",
+							"value": "mysql",
+							"type": "text",
+							"description": ""
+						},
+						{
+							"key": "tableName",
+							"value": "user",
+							"type": "text",
+							"description": ""
+						},
+						{
+							"key": "columnName",
+							"value": "emailId",
+							"type": "text",
+							"description": ""
+						}
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		}
+	]
+}
